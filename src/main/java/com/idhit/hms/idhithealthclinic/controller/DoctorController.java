@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api")
 public class DoctorController {
 
     @Autowired
@@ -48,6 +49,12 @@ public class DoctorController {
     @GetMapping("doctors/{id}/appointments")
     public List<Appointment> listAllAppointmentOfTheDoctor(@PathVariable Long id){
         return doctorService.listAllAppointments(id);
+    }
+
+    @PutMapping("doctors/{id}")
+    public Doctor updateDoctor(@PathVariable Long id,
+                               @RequestBody DoctorRequestPayload doctorRequestPayload){
+        return doctorService.updateDoctor(id, doctorRequestPayload);
     }
 
 }

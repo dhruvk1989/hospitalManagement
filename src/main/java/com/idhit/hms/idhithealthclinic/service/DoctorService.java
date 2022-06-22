@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class DoctorService {
@@ -74,5 +75,24 @@ public class DoctorService {
        }else{
            return doctorRepo.findById(id).get().getAppointments();
        }
+    }
+
+    public Doctor updateDoctor(Long id, DoctorRequestPayload doctorRequestPayload) {
+        if(!doctorRepo.existsById(id)){
+            throw new ResourceNotFoundException("Doctor", id);
+        }
+        Doctor doctor = doctorRepo.findById(id).get();
+        doctor.setDoctorId(id);
+        if(doctorRequestPayload.getName() != null || doctorRequestPayload.getName().length() > 0){
+            doctor.setName(doctorRequestPayload.getName());
+        }
+        if(doctorRequestPayload.getAge() != null || doctorRequestPayload.getAge().length() > 0){
+            doctor.setAge(doctorRequestPayload.getAge());
+        }
+        if(doctorRequestPayload.getDept() != null || doctorRequestPayload.getDept().length() > 0){
+            Optional<Department> departmentByDeptName = departmentRepo.findDepartmentByDeptName(doctorRequestPayload.getDept());
+            departmentByDeptName.ifPresent((a) -> doctor.setDept(a));
+        }
+        return doctorRepo.save(doctor);
     }
 }

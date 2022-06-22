@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api")
 public class AppointmentController {
 
     @Autowired
@@ -23,12 +24,12 @@ public class AppointmentController {
     @Autowired
     AppointmentRepo appointmentRepo;
 
-    @GetMapping("/appointment")
+    @GetMapping("/appointments")
     public List<Appointment> getAllAppointment(){
         return appointmentService.getAllAppointments();
     }
 
-    @GetMapping("/appointment/{id}")
+    @GetMapping("/appointments/{id}")
     public Appointment getOneAppointment(@PathVariable("id") Long id){
         System.out.println("hello");
         Appointment appointment = appointmentService.getOneAppointment(id);
@@ -40,7 +41,7 @@ public class AppointmentController {
         }
     }
 
-    @DeleteMapping("/appointment/{id}")
+    @DeleteMapping("/appointments/{id}")
     public ResponseEntity<String> deleteAppointment(@PathVariable("id") Long id){
         if(appointmentRepo.existsById(id) == false){
             throw new ResourceNotFoundException("Appointment", id);
@@ -51,9 +52,15 @@ public class AppointmentController {
         }
     }
 
-    @PostMapping("appointment")
+    @PostMapping("appointments")
     public ResponseEntity<String> createAppointment(@RequestBody AppointmentRequestPayload payload){
         return new ResponseEntity<String>(appointmentService.createAppointment(payload), HttpStatus.CREATED);
+    }
+
+    @PutMapping("appointments/{id}")
+    public Appointment updateAppointment(@PathVariable Long id,
+                                         @RequestBody AppointmentRequestPayload appointmentRequestPayload){
+        return appointmentService.updateAppointment(id, appointmentRequestPayload);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.idhit.hms.idhithealthclinic.service;
 
 import com.idhit.hms.idhithealthclinic.entity.Appointment;
+import com.idhit.hms.idhithealthclinic.entity.Department;
 import com.idhit.hms.idhithealthclinic.entity.Doctor;
 import com.idhit.hms.idhithealthclinic.exception.ResourceNotFoundException;
 import com.idhit.hms.idhithealthclinic.payload.AppointmentRequestPayload;
@@ -83,4 +84,23 @@ public class AppointmentService {
 
     }
 
+    public Appointment updateAppointment(Long id, AppointmentRequestPayload appointmentRequestPayload) {
+        if(!appointmentRepo.existsById(id)){
+            throw new ResourceNotFoundException("Appointment", id);
+        }
+        Appointment appointment = appointmentRepo.findById(id).get();
+        if(appointmentRequestPayload.getName() != null || appointmentRequestPayload.getName().length() > 0){
+            appointment.setPatientName(appointmentRequestPayload.getName());
+        }
+        if(appointmentRequestPayload.getAge() != null || appointmentRequestPayload.getAge() > 0){
+            appointment.setAge(appointmentRequestPayload.getAge());
+        }
+        if(appointmentRequestPayload.getSymptoms() != null || appointmentRequestPayload.getSymptoms().length() > 0){
+            appointment.setSymptoms(appointmentRequestPayload.getSymptoms());
+        }
+        if(appointmentRequestPayload.getGender() != null || appointmentRequestPayload.getGender().length() > 0){
+            appointment.setGender(appointmentRequestPayload.getGender());
+        }
+        return appointmentRepo.save(appointment);
+    }
 }

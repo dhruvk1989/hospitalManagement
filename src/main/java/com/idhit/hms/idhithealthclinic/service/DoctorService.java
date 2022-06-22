@@ -1,0 +1,78 @@
+package com.idhit.hms.idhithealthclinic.service;
+
+import com.idhit.hms.idhithealthclinic.entity.Appointment;
+import com.idhit.hms.idhithealthclinic.entity.Department;
+import com.idhit.hms.idhithealthclinic.entity.Doctor;
+import com.idhit.hms.idhithealthclinic.exception.ResourceNotFoundException;
+import com.idhit.hms.idhithealthclinic.payload.DoctorRequestPayload;
+import com.idhit.hms.idhithealthclinic.repo.AppointmentRepo;
+import com.idhit.hms.idhithealthclinic.repo.DepartmentRepo;
+import com.idhit.hms.idhithealthclinic.repo.DoctorRepo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jca.cci.RecordTypeNotSupportedException;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.NoSuchElementException;
+
+@Service
+public class DoctorService {
+
+    @Autowired
+    DoctorRepo doctorRepo;
+
+    @Autowired
+    DepartmentRepo departmentRepo;
+
+    @Autowired
+    AppointmentRepo appointmentRepo;
+
+    public List<Doctor> getAllDoctors(){
+        return doctorRepo.findAll();
+    }
+
+    public Doctor getOneDoctor(Long id) {
+        Doctor doctor;
+        try {
+            doctor = doctorRepo.findById(id).get();
+        } catch (NoSuchElementException e) {
+            throw new ResourceNotFoundException("Doctor", id);
+        }
+        return doctor;
+    }
+
+    public String createDoctor(DoctorRequestPayload doctorRP) {
+        Doctor doctor = new Doctor();
+        if(!doctorRP.getName().contains("Dr.")){
+            doctorRP.setName("Dr. " + doctorRP.getName());
+        }
+        doctor.setName(doctorRP.getName());
+        doctor.setAge(doctorRP.getAge());
+        Department department = null;
+        try {
+            departmentRepo.findDepartmentByDeptName(doctorRP.getDept());
+        }catch(NoSuchElementException e){
+            throw new ResourceNotFoundException("Department");
+        }
+        doctor.setDept(department);
+        Doctor savedDoctor = doctorRepo.save(doctor);
+        return savedDoctor.getName() + " with the ID " + savedDoctor.getDoctorId() + " has been saved.";
+    }
+
+    public String deleteDoctor(Long id) {
+        if(doctorRepo.existsById(id) == false) {
+            throw new ResourceNotFoundException("Doctor", id);
+        }else{
+            doctorRepo.deleteById(id);
+        }
+        return "Doctor with ID " + id + " has been successfully deleted.";
+    }
+
+    public List<Appointment> listAllAppointments(Long id) {
+       if(doctorRepo.existsById(id) == false){
+           throw new ResourceNotFoundException("Doctor", id);
+       }else{
+           return doctorRepo.findById(id).get().getAppointments();
+       }
+    }
+}

@@ -1,13 +1,11 @@
 package com.idhit.hms.idhithealthclinic.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -26,10 +24,12 @@ public class Doctor {
     @ManyToOne
     private Department dept;
 
-    @OneToMany(mappedBy = "doctor")
+    @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Prescription> prescriptionList;
 
-    @OneToMany(mappedBy = "doctor")
+    @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Appointment> appointments;
 
 }

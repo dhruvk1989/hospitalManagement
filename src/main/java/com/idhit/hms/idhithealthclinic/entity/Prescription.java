@@ -13,6 +13,6 @@ public class Prescription {
     private Doctor doctor;
 
     @OneToOne
-    private Patient patient;
+    private Appointment appointment;
     
 }

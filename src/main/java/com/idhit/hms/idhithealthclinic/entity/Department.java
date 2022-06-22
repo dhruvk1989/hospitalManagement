@@ -1,5 +1,6 @@
 package com.idhit.hms.idhithealthclinic.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,7 @@ public class Department {
     private Long deptId;
 
     @OneToMany
+    @JsonIgnore
     private List<Doctor> doctor;
 
     private String deptName;

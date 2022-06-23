@@ -51,7 +51,7 @@ public class PrescriptionController {
                                            @PathVariable Long apptId,
                                            @PathVariable Long pId,
                                            @RequestBody PrescriptionRequestPayload prescriptionRequestPayload){
-        return prescriptionService.updatePrescription(docId, apptId, pId, prescriptionService);
+        return prescriptionService.updatePrescription(docId, apptId, pId, prescriptionRequestPayload);
     }
 
 }

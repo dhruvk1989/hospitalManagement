@@ -89,16 +89,16 @@ public class AppointmentService {
             throw new ResourceNotFoundException("Appointment", id);
         }
         Appointment appointment = appointmentRepo.findById(id).get();
-        if(appointmentRequestPayload.getName() != null || appointmentRequestPayload.getName().length() > 0){
+        if(appointmentRequestPayload.getName() != null && appointmentRequestPayload.getName().length() > 0){
             appointment.setPatientName(appointmentRequestPayload.getName());
         }
-        if(appointmentRequestPayload.getAge() != null || appointmentRequestPayload.getAge() > 0){
+        if(appointmentRequestPayload.getAge() != null && appointmentRequestPayload.getAge() > 0){
             appointment.setAge(appointmentRequestPayload.getAge());
         }
-        if(appointmentRequestPayload.getSymptoms() != null || appointmentRequestPayload.getSymptoms().length() > 0){
+        if(appointmentRequestPayload.getSymptoms() != null && appointmentRequestPayload.getSymptoms().length() > 0){
             appointment.setSymptoms(appointmentRequestPayload.getSymptoms());
         }
-        if(appointmentRequestPayload.getGender() != null || appointmentRequestPayload.getGender().length() > 0){
+        if(appointmentRequestPayload.getGender() != null && appointmentRequestPayload.getGender().length() > 0){
             appointment.setGender(appointmentRequestPayload.getGender());
         }
         return appointmentRepo.save(appointment);

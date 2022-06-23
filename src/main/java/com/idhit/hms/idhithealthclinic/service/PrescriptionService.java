@@ -92,7 +92,7 @@ public class PrescriptionService {
         return "The prescription of " + prescription.getAppointment().getPatientName() + " has been deleted";
     }
 
-    public Prescription updatePrescription(Long docId, Long apptId, Long pId, PrescriptionService prescriptionService) {
+    public Prescription updatePrescription(Long docId, Long apptId, Long pId, PrescriptionRequestPayload prescriptionRequestPayload) {
         if(!doctorRepo.existsById(docId)){
             throw new ResourceNotFoundException("Doctor", docId);
         }
@@ -105,6 +105,7 @@ public class PrescriptionService {
 
         Prescription prescription = prescriptionRepo.findById(pId).get();
         prescription.setPrescriptionId(pId);
+        prescription.setMedicines(Arrays.stream(prescriptionRequestPayload.getMedicines().split(",")).sorted().collect(Collectors.toList()));
         return prescriptionRepo.save(prescription);
     }
 }

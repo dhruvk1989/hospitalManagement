@@ -83,13 +83,13 @@ public class DoctorService {
         }
         Doctor doctor = doctorRepo.findById(id).get();
         doctor.setDoctorId(id);
-        if(doctorRequestPayload.getName() != null || doctorRequestPayload.getName().length() > 0){
+        if(doctorRequestPayload.getName() != null && doctorRequestPayload.getName().length() > 0){
             doctor.setName(doctorRequestPayload.getName());
         }
-        if(doctorRequestPayload.getAge() != null || doctorRequestPayload.getAge().length() > 0){
+        if(doctorRequestPayload.getAge() != null && doctorRequestPayload.getAge().length() > 0){
             doctor.setAge(doctorRequestPayload.getAge());
         }
-        if(doctorRequestPayload.getDept() != null || doctorRequestPayload.getDept().length() > 0){
+        if(doctorRequestPayload.getDept() != null && doctorRequestPayload.getDept().length() > 0){
             Optional<Department> departmentByDeptName = departmentRepo.findDepartmentByDeptName(doctorRequestPayload.getDept());
             departmentByDeptName.ifPresent((a) -> doctor.setDept(a));
         }

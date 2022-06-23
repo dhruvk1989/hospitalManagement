@@ -31,9 +31,7 @@ public class AppointmentController {
 
     @GetMapping("/appointments/{id}")
     public Appointment getOneAppointment(@PathVariable("id") Long id){
-        System.out.println("hello");
         Appointment appointment = appointmentService.getOneAppointment(id);
-        System.out.println("hello1");
         if(appointment == null){
             throw new ResourceNotFoundException("Appointment", id);
         }else{

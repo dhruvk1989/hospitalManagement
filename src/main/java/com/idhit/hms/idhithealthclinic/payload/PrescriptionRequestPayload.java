@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 public class PrescriptionRequestPayload {
 
     private String medicines;
+    //private String doctorRemarks;
 
 }

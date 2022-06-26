@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.springframework.format.annotation.DateTimeFormat;
 
+
 @Entity
 
 @Table(name = "appointment")
@@ -21,6 +22,16 @@ public class Appointment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     private Doctor doctor;
+
+    private String doctorName;
+
+    public String getDoctorName() {
+        return doctorName;
+    }
+
+    public void setDoctorName(String doctorName) {
+        this.doctorName = doctorName;
+    }
 
     private String patientName;
     private String gender;
@@ -111,3 +122,7 @@ public class Appointment {
     }
 
 }
+
+
+
+

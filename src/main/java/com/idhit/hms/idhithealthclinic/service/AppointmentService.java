@@ -5,7 +5,10 @@ import com.idhit.hms.idhithealthclinic.entity.Department;
 import com.idhit.hms.idhithealthclinic.entity.Doctor;
 import com.idhit.hms.idhithealthclinic.exception.ResourceNotFoundException;
 import com.idhit.hms.idhithealthclinic.payload.AppointmentRequestPayload;
+import com.idhit.hms.idhithealthclinic.payload.AppointmentResponsePayload;
+import com.idhit.hms.idhithealthclinic.payload.DoctorAppointments;
 import com.idhit.hms.idhithealthclinic.repo.AppointmentRepo;
+import com.idhit.hms.idhithealthclinic.repo.DepartmentRepo;
 import com.idhit.hms.idhithealthclinic.repo.DoctorRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,9 @@ public class AppointmentService {
 
     @Autowired
     DoctorRepo doctorRepo;
+
+    @Autowired
+    private DepartmentRepo departmentRepo;
 
     public List<Appointment> getAllAppointments(){
         return appointmentRepo.findAll();
@@ -42,7 +48,7 @@ public class AppointmentService {
         appointmentRepo.deleteById(id);
     }
 
-    public String createAppointment(AppointmentRequestPayload apptReqPayload){
+    public Appointment createAppointment(AppointmentRequestPayload apptReqPayload){
         Appointment appointment = new Appointment();
         appointment.setSymptoms(apptReqPayload.getSymptoms());
         appointment.setAppointmentDateTime(new Date());
@@ -54,33 +60,39 @@ public class AppointmentService {
         String symptoms = apptReqPayload.getSymptoms();
 
         Doctor assignedDoctor = null;
+        Department department = null;
 
         if(symptoms.toLowerCase().contains("heart") || symptoms.toLowerCase().contains("blood pressure")
             || symptoms.toLowerCase().contains("breathlessness") || symptoms.toLowerCase().contains("palpitation")
             || symptoms.toLowerCase().contains("pain in left shoulder")){
-            assignedDoctor = doctorRepo.getDoctorByDeptJoin("Cardiologist");
+            department = departmentRepo.findDepartmentByDeptName("Cardiologist").get();
         }else if(symptoms.toLowerCase().contains("ear") || symptoms.toLowerCase().contains("nose")
                 || symptoms.toLowerCase().contains("throat")){
-            assignedDoctor = doctorRepo.getDoctorByDeptJoin("ENT");
+            department = departmentRepo.findDepartmentByDeptName("ENT").get();
         }else if(symptoms.toLowerCase().contains("eye") || symptoms.toLowerCase().contains("sight")
                 || symptoms.toLowerCase().contains("vision")){
-            assignedDoctor = doctorRepo.getDoctorByDeptJoin("Opthamologist");
+            department = departmentRepo.findDepartmentByDeptName("Opthamologist").get();
         }else if(symptoms.toLowerCase().contains("hearing problem") || symptoms.toLowerCase().contains("sound")
                 || symptoms.toLowerCase().contains("ear problem")){
-            assignedDoctor = doctorRepo.getDoctorByDeptJoin("Audiologist");
+            department = departmentRepo.findDepartmentByDeptName("Audiologist").get();
         }else if(symptoms.toLowerCase().contains("fever") || symptoms.toLowerCase().contains("cold")
                 || symptoms.toLowerCase().contains("cough")){
-            assignedDoctor = doctorRepo.getDoctorByDeptJoin("General Physician");
+            department = departmentRepo.findDepartmentByDeptName("General Physician").get();
         }
+
+        List<DoctorAppointments> doctorAppointments = appointmentRepo.getDoctorAppointmentByDeptId(department.getDeptId());
+        DoctorAppointments doctorAppointments1 = doctorAppointments.stream().min((a, b) -> a.compareTo(b)).get();
+        assignedDoctor = doctorRepo.findById(Long.parseLong(""+doctorAppointments1.getDoctorId())).get();
 
         appointment.setDoctor(assignedDoctor);
+        if(assignedDoctor != null){
+            appointment.setDoctorName(assignedDoctor.getName());
+        }else{
+            appointment.setDoctorName("None");
+        }
         Appointment save = appointmentRepo.save(appointment);
 
-        if(assignedDoctor == null){
-            return "No doctor was found at the moment.";
-        }else{
-            return "You have been assigned to " + assignedDoctor.getName() + ". Your appointment ID is " + save.getId();
-        }
+        return save;
 
     }
 

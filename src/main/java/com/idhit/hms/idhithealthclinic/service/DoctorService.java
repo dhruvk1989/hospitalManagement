@@ -42,22 +42,24 @@ public class DoctorService {
         return doctor;
     }
 
-    public String createDoctor(DoctorRequestPayload doctorRP) {
+    public Doctor createDoctor(DoctorRequestPayload doctorRP) {
         Doctor doctor = new Doctor();
         if(!doctorRP.getName().contains("Dr.")){
             doctorRP.setName("Dr. " + doctorRP.getName());
         }
         doctor.setName(doctorRP.getName());
         doctor.setAge(doctorRP.getAge());
-        Department department = null;
+        Optional<Department> department = null;
         try {
-            departmentRepo.findDepartmentByDeptName(doctorRP.getDept());
+            department = departmentRepo.findDepartmentByDeptName(doctorRP.getDept());
         }catch(NoSuchElementException e){
             throw new ResourceNotFoundException("Department");
+        }catch (Exception e){
+            System.out.println(e.getMessage());
         }
-        doctor.setDept(department);
+        doctor.setDept(department.get());
         Doctor savedDoctor = doctorRepo.save(doctor);
-        return savedDoctor.getName() + " with the ID " + savedDoctor.getDoctorId() + " has been saved.";
+        return savedDoctor;
     }
 
     public String deleteDoctor(Long id) {

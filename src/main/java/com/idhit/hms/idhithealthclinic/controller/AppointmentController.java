@@ -4,6 +4,7 @@ import com.idhit.hms.idhithealthclinic.entity.Appointment;
 import com.idhit.hms.idhithealthclinic.entity.Doctor;
 import com.idhit.hms.idhithealthclinic.exception.ResourceNotFoundException;
 import com.idhit.hms.idhithealthclinic.payload.AppointmentRequestPayload;
+import com.idhit.hms.idhithealthclinic.payload.AppointmentResponsePayload;
 import com.idhit.hms.idhithealthclinic.repo.AppointmentRepo;
 import com.idhit.hms.idhithealthclinic.repo.DoctorRepo;
 import com.idhit.hms.idhithealthclinic.service.AppointmentService;
@@ -51,8 +52,8 @@ public class AppointmentController {
     }
 
     @PostMapping("appointments")
-    public ResponseEntity<String> createAppointment(@RequestBody AppointmentRequestPayload payload){
-        return new ResponseEntity<String>(appointmentService.createAppointment(payload), HttpStatus.CREATED);
+    public ResponseEntity<Appointment> createAppointment(@RequestBody AppointmentRequestPayload payload){
+        return new ResponseEntity<Appointment>(appointmentService.createAppointment(payload), HttpStatus.CREATED);
     }
 
     @PutMapping("appointments/{id}")

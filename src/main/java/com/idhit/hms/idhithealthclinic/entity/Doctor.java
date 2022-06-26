@@ -15,6 +15,7 @@ import java.util.List;
 public class Doctor {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long doctorId;
 
     private String name;

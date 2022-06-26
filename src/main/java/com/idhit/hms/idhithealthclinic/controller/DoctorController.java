@@ -35,9 +35,8 @@ public class DoctorController {
     }
 
     @PostMapping("/doctors")
-    public ResponseEntity<String> createDoctor(@RequestBody DoctorRequestPayload doctorRP){
-        String result = doctorService.createDoctor(doctorRP);
-        return new ResponseEntity<String>(result, HttpStatus.CREATED);
+    public Doctor createDoctor(@RequestBody DoctorRequestPayload doctorRP){
+        return doctorService.createDoctor(doctorRP);
     }
 
     @DeleteMapping("/doctors/{id}")

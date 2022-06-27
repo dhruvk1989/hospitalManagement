@@ -53,6 +53,7 @@ public class PrescriptionService {
         prescription.setAppointment(appointment);
         prescription.setDoctor(doctor);
         prescription.setMedicines(prescriptionRP.getMedicines());
+        prescription.setDoctorRemarks(prescriptionRP.getDoctorRemarks());
         prescription = prescriptionRepo.save(prescription);
 
         appointment.setStatus("Prescribed");
@@ -103,7 +104,13 @@ public class PrescriptionService {
 
         Prescription prescription = prescriptionRepo.findById(pId).get();
         prescription.setPrescriptionId(pId);
-        prescription.setMedicines(prescriptionRequestPayload.getMedicines());
+        if(prescriptionRequestPayload.getMedicines() != null && prescriptionRequestPayload.getMedicines().length() > 0){
+            prescription.setMedicines(prescriptionRequestPayload.getMedicines());
+        }
+        if(prescriptionRequestPayload.getDoctorRemarks() != null && prescriptionRequestPayload.getDoctorRemarks().length() > 0){
+            prescription.setDoctorRemarks(prescriptionRequestPayload.getDoctorRemarks());
+        }
+
         return prescriptionRepo.save(prescription);
     }
 }

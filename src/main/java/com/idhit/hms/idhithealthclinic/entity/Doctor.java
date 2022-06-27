@@ -22,14 +22,14 @@ public class Doctor {
 
     private String age;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.DETACH)
     private Department dept;
 
-    @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Prescription> prescriptionList;
 
-    @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Appointment> appointments;
 

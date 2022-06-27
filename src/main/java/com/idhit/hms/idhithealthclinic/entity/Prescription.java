@@ -26,7 +26,6 @@ public class Prescription {
     @OneToOne
     private Appointment appointment;
 
-    @Transient
-    private List<String> medicines;
+    private String medicines;
     
 }

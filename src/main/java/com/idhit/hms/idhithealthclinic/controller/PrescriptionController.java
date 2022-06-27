@@ -25,11 +25,11 @@ public class PrescriptionController {
     }
 
     @PostMapping("/doctors/{docId}/appointments/{apptId}/prescriptions")
-    public ResponseEntity<String> createPrescription(@PathVariable Long docId,
+    public ResponseEntity<Prescription> createPrescription(@PathVariable Long docId,
                                                      @PathVariable Long apptId,
                                                      @RequestBody PrescriptionRequestPayload prescriptionRequestPayload){
-        String result = prescriptionService.createPrescription(docId, apptId, prescriptionRequestPayload);
-        return new ResponseEntity<>(result, HttpStatus.CREATED);
+        Prescription prescription = prescriptionService.createPrescription(docId, apptId, prescriptionRequestPayload);
+        return new ResponseEntity<>(prescription, HttpStatus.CREATED);
     }
 
     @GetMapping("/doctors/{docId}/appointments/{apptId}/prescriptions/{pId}")

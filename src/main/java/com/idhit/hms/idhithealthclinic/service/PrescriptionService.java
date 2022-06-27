@@ -39,7 +39,7 @@ public class PrescriptionService {
         return prescriptionRepo.findPrescriptionByDoctorAndAppointment(id, apptId);
     }
 
-    public String createPrescription(Long docId, Long apptId, PrescriptionRequestPayload prescriptionRP){
+    public Prescription createPrescription(Long docId, Long apptId, PrescriptionRequestPayload prescriptionRP){
         Prescription prescription = new Prescription();
         if(!doctorRepo.existsById(docId)){
             throw new ResourceNotFoundException("Doctor", docId);
@@ -52,15 +52,13 @@ public class PrescriptionService {
 
         prescription.setAppointment(appointment);
         prescription.setDoctor(doctor);
-        prescription.setMedicines(Arrays.stream(prescriptionRP.getMedicines().split(",")).sorted().collect(Collectors.toList()));
+        prescription.setMedicines(prescriptionRP.getMedicines());
         prescription = prescriptionRepo.save(prescription);
 
         appointment.setStatus("Prescribed");
         appointmentRepo.save(appointment);
 
-        return "A prescription has been created for the patient " + appointment.getPatientName()
-                + " by the doctor " + doctor.getName() + "." + "The medicines prescribed are " +
-                prescriptionRP.getMedicines() + ".";
+        return prescription;
 
     }
 
@@ -105,7 +103,7 @@ public class PrescriptionService {
 
         Prescription prescription = prescriptionRepo.findById(pId).get();
         prescription.setPrescriptionId(pId);
-        prescription.setMedicines(Arrays.stream(prescriptionRequestPayload.getMedicines().split(",")).sorted().collect(Collectors.toList()));
+        prescription.setMedicines(prescriptionRequestPayload.getMedicines());
         return prescriptionRepo.save(prescription);
     }
 }

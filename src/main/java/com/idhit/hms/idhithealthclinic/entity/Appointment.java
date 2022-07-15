@@ -7,11 +7,14 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 
 @Entity
-
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "appointment")
 public class Appointment {
 
@@ -44,6 +47,10 @@ public class Appointment {
     @Column(name = "appointment_date", nullable = true, length = 10)
     private Date appointmentDateTime;
 
+    @Temporal(TemporalType.TIME)
+    @Column(name = "appointment_time")
+    private Date time;
+
     @Column(name = "status", nullable = true, length = 50)
     private String status;
 
@@ -51,6 +58,14 @@ public class Appointment {
 
     public String getSymptoms(){
         return symptoms;
+    }
+
+    public Date getTime() {
+        return time;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
     }
 
     public void setSymptoms(String symptoms){
@@ -121,6 +136,20 @@ public class Appointment {
         this.status = status;
     }
 
+    @Override
+    public String toString() {
+        return "Appointment{" +
+                "doctor=" + doctor +
+                ", doctorName='" + doctorName + '\'' +
+                ", patientName='" + patientName + '\'' +
+                ", gender='" + gender + '\'' +
+                ", age=" + age +
+                ", appointmentDateTime=" + appointmentDateTime +
+                ", time=" + time +
+                ", status='" + status + '\'' +
+                ", symptoms='" + symptoms + '\'' +
+                '}';
+    }
 }
 
 

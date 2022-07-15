@@ -1,18 +1,18 @@
 package com.idhit.hms.idhithealthclinic.controller;
 
 import com.idhit.hms.idhithealthclinic.entity.Appointment;
-import com.idhit.hms.idhithealthclinic.entity.Doctor;
 import com.idhit.hms.idhithealthclinic.exception.ResourceNotFoundException;
 import com.idhit.hms.idhithealthclinic.payload.AppointmentRequestPayload;
-import com.idhit.hms.idhithealthclinic.payload.AppointmentResponsePayload;
 import com.idhit.hms.idhithealthclinic.repo.AppointmentRepo;
-import com.idhit.hms.idhithealthclinic.repo.DoctorRepo;
 import com.idhit.hms.idhithealthclinic.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -52,7 +52,7 @@ public class AppointmentController {
     }
 
     @PostMapping("appointments")
-    public ResponseEntity<Appointment> createAppointment(@RequestBody AppointmentRequestPayload payload){
+    public ResponseEntity<Appointment> createAppointment(@RequestBody AppointmentRequestPayload payload) throws ParseException {
         return new ResponseEntity<Appointment>(appointmentService.createAppointment(payload), HttpStatus.CREATED);
     }
 

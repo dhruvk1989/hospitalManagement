@@ -3,6 +3,7 @@ package com.idhit.hms.idhithealthclinic.controller;
 import com.idhit.hms.idhithealthclinic.entity.Appointment;
 import com.idhit.hms.idhithealthclinic.entity.Doctor;
 import com.idhit.hms.idhithealthclinic.payload.DoctorRequestPayload;
+import com.idhit.hms.idhithealthclinic.payload.Schedule;
 import com.idhit.hms.idhithealthclinic.repo.DepartmentRepo;
 import com.idhit.hms.idhithealthclinic.repo.DoctorRepo;
 import com.idhit.hms.idhithealthclinic.service.DoctorService;
@@ -48,6 +49,11 @@ public class DoctorController {
     @GetMapping("doctors/{id}/appointments")
     public List<Appointment> listAllAppointmentOfTheDoctor(@PathVariable Long id){
         return doctorService.listAllAppointments(id);
+    }
+
+    @GetMapping("doctors/{id}/schedule")
+    public List<Schedule> listAllSchedules(@PathVariable Long id){
+        return doctorService.listDoctorSchedule(id);
     }
 
     @PutMapping("doctors/{id}")

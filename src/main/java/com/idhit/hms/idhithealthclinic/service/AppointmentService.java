@@ -7,12 +7,17 @@ import com.idhit.hms.idhithealthclinic.exception.ResourceNotFoundException;
 import com.idhit.hms.idhithealthclinic.payload.AppointmentRequestPayload;
 import com.idhit.hms.idhithealthclinic.payload.AppointmentResponsePayload;
 import com.idhit.hms.idhithealthclinic.payload.DoctorAppointments;
+import com.idhit.hms.idhithealthclinic.payload.Schedule;
 import com.idhit.hms.idhithealthclinic.repo.AppointmentRepo;
 import com.idhit.hms.idhithealthclinic.repo.DepartmentRepo;
 import com.idhit.hms.idhithealthclinic.repo.DoctorRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -48,10 +53,10 @@ public class AppointmentService {
         appointmentRepo.deleteById(id);
     }
 
-    public Appointment createAppointment(AppointmentRequestPayload apptReqPayload){
+    public Appointment createAppointment(AppointmentRequestPayload apptReqPayload) throws ParseException {
         Appointment appointment = new Appointment();
         appointment.setSymptoms(apptReqPayload.getSymptoms());
-        appointment.setAppointmentDateTime(new Date());
+
         appointment.setStatus("Open");
         appointment.setAge(apptReqPayload.getAge());
         appointment.setGender(apptReqPayload.getGender());
@@ -90,6 +95,23 @@ public class AppointmentService {
         }else{
             appointment.setDoctorName("None");
         }
+
+        //setting the time for the appointment
+
+        List<Schedule> appointmentList = appointmentRepo.getAppointmentsByDoctor(assignedDoctor.getDoctorId());
+        appointmentList.stream().forEach(System.out::println);
+        System.out.println(appointmentList.get(0).getDocTime());
+        System.out.println(appointmentList.stream().max((a,b) -> a.getDocTime().compareTo(b.getDocTime())).get().getDocName());
+        Date time = appointmentList.stream().max((a,b) -> a.getDocTime().compareTo(b.getDocTime())).get().getDocTime();
+
+        appointment.setAppointmentDateTime( new Date());
+
+        //setting the time
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+        System.out.println(simpleDateFormat.parse(simpleDateFormat.format(new java.util.Date())));
+        appointment.setTime(simpleDateFormat.parse(simpleDateFormat.format(new Date(time.getTime() + (20*60*1000)))));
+
+
         Appointment save = appointmentRepo.save(appointment);
 
         return save;

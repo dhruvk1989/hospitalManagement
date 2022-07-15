@@ -5,6 +5,7 @@ import com.idhit.hms.idhithealthclinic.entity.Department;
 import com.idhit.hms.idhithealthclinic.entity.Doctor;
 import com.idhit.hms.idhithealthclinic.exception.ResourceNotFoundException;
 import com.idhit.hms.idhithealthclinic.payload.DoctorRequestPayload;
+import com.idhit.hms.idhithealthclinic.payload.Schedule;
 import com.idhit.hms.idhithealthclinic.repo.AppointmentRepo;
 import com.idhit.hms.idhithealthclinic.repo.DepartmentRepo;
 import com.idhit.hms.idhithealthclinic.repo.DoctorRepo;
@@ -97,4 +98,9 @@ public class DoctorService {
         }
         return doctorRepo.save(doctor);
     }
+
+    public List<Schedule> listDoctorSchedule(Long id){
+        return appointmentRepo.getAppointmentsByDoctor(id);
+    }
+
 }

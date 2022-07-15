@@ -33,4 +33,16 @@ public class Doctor {
     @JsonIgnore
     private List<Appointment> appointments;
 
+    private String userName;
+
+    @Override
+    public String toString() {
+        return "Doctor{" +
+                "name='" + name + '\'' +
+                ", age='" + age + '\'' +
+                '}';
+    }
 }
+
+
+

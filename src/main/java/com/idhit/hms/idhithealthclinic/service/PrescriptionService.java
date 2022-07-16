@@ -39,6 +39,14 @@ public class PrescriptionService {
         return prescriptionRepo.findPrescriptionByDoctorAndAppointment(id, apptId);
     }
 
+    public List<Prescription> getAllPrescriptionsDoctor(Long docId){
+        if(!doctorRepo.existsById(docId)){
+            throw new ResourceNotFoundException("Doctor", docId);
+        }
+
+        return prescriptionRepo.findPrescriptionByDoctor(docId);
+    }
+
     public Prescription createPrescription(Long docId, Long apptId, PrescriptionRequestPayload prescriptionRP){
         Prescription prescription = new Prescription();
         if(!doctorRepo.existsById(docId)){
@@ -57,6 +65,7 @@ public class PrescriptionService {
         prescription = prescriptionRepo.save(prescription);
 
         appointment.setStatus("Prescribed");
+        appointment.setPrescriptionId(prescription.getPrescriptionId());
         appointmentRepo.save(appointment);
 
         return prescription;

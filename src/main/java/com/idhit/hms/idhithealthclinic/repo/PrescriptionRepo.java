@@ -14,4 +14,7 @@ public interface PrescriptionRepo extends JpaRepository<Prescription, Long> {
     @Query(value = "Select * from prescription where doctor_doctor_id = ?1 and appointment_id = ?2", nativeQuery = true)
     public List<Prescription> findPrescriptionByDoctorAndAppointment(Long docId, Long apptId);
 
+    @Query(value = "Select * from prescription where doctor_doctor_id = ?1", nativeQuery = true)
+    public List<Prescription> findPrescriptionByDoctor(Long docId);
+
 }

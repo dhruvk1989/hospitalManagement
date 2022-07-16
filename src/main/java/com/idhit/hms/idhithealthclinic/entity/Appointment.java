@@ -56,6 +56,16 @@ public class Appointment {
 
     private String symptoms;
 
+    private Long prescriptionId;
+
+    public Long getPrescriptionId() {
+        return prescriptionId;
+    }
+
+    public void setPrescriptionId(Long prescriptionId) {
+        this.prescriptionId = prescriptionId;
+    }
+
     public String getSymptoms(){
         return symptoms;
     }

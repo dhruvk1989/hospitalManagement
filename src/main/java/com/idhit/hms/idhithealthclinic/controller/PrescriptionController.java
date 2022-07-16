@@ -39,6 +39,11 @@ public class PrescriptionController {
         return prescriptionService.getOnePrescription(docId, apptId, pId);
     }
 
+    @GetMapping("/doctors/{docId}/prescriptions")
+    public List<Prescription> getAllPrescriptions(@PathVariable Long docId){
+        return prescriptionService.getAllPrescriptionsDoctor(docId);
+    }
+
     @DeleteMapping("/doctors/{docId}/appointments/{apptId}/prescriptions/{pId}")
     public String deletePrescription(@PathVariable Long docId,
                                            @PathVariable Long apptId,

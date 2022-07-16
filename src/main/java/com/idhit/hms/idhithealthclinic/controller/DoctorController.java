@@ -2,6 +2,7 @@ package com.idhit.hms.idhithealthclinic.controller;
 
 import com.idhit.hms.idhithealthclinic.entity.Appointment;
 import com.idhit.hms.idhithealthclinic.entity.Doctor;
+import com.idhit.hms.idhithealthclinic.exception.ResourceNotFoundException;
 import com.idhit.hms.idhithealthclinic.payload.DoctorRequestPayload;
 import com.idhit.hms.idhithealthclinic.payload.Schedule;
 import com.idhit.hms.idhithealthclinic.repo.DepartmentRepo;
@@ -44,6 +45,17 @@ public class DoctorController {
     public ResponseEntity<String> deleteDoctor(@PathVariable Long id){
         String result = doctorService.deleteDoctor(id);
         return new ResponseEntity<String>(result, HttpStatus.OK);
+    }
+
+    @GetMapping("/doctors/emailSearch")
+    public Doctor findByEmail(@RequestParam("email") String email){
+        Doctor doctor;
+        try{
+            doctor = doctorRepo.findDoctorByUserName(email).get();
+        }catch (Exception e){
+            throw new ResourceNotFoundException("Doctor");
+        }
+        return doctor;
     }
 
     @GetMapping("doctors/{id}/appointments")
